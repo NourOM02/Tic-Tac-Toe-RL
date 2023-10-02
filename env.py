@@ -89,6 +89,7 @@ def check_win():
 def play_again():
     play_again = input("Do you want to play again? (Y/N)").upper()
     if play_again == "Y":
+        board = intialize_board()
         return True
     return False
 
