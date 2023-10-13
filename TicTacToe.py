@@ -4,7 +4,7 @@ import random
 import json
 
 class TicTacToeGUI:
-    def __init__(self):
+    def __init__(self, agent = "ValueIteration"):
         self.window = tk.Tk()
         self.window.title("Tic Tac Toe")
         self.current_player = "X"
@@ -12,10 +12,15 @@ class TicTacToeGUI:
         self.buttons = [None] * 9
         self.is_vs_computer = False  # Flag to check if playing against the computer
         self.computer_symbol = "O"   # Symbol for the computer player
+        self.agent = agent
         self.policy = {}
-        with open("policy.json", 'r') as json_file:
-            # open json file as dictionary
-            self.policy = json.load(json_file)
+        if self.agent == "ValueIteration":
+            path = "Policies/valueIteration.json"
+        elif self.agent == "PolicyIteration":
+            path = "Policies/policyIteration.json"
+        with open(path, 'r') as json_file:
+                # open json file as dictionary
+                self.policy = json.load(json_file)
 
         # Calculate the window position to center it on the screen
         screen_width = self.window.winfo_screenwidth()
@@ -111,5 +116,5 @@ class TicTacToeGUI:
         self.window.mainloop()
 
 if __name__ == "__main__":
-    game = TicTacToeGUI()
+    game = TicTacToeGUI("PolicyIteration")
     game.start()

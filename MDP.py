@@ -1,11 +1,14 @@
 import numpy as np
 from tqdm import tqdm
+import json
 
 class MDP:
     def __init__(self):
         self.states = set()
         self.T_states = set()
         self.actions = {}
+        self.policy = open("Policies/policyIteration.json", "r")
+        self.policy = json.load(self.policy)
 
     def generate_states(self):
         """
@@ -20,7 +23,7 @@ class MDP:
             # 0 : no move
             # 1 : X
             # 2 : O
-            possible_states = set()
+            all_board_config = set()
             for a in range(3):
                 for b in range(3):
                     for c in range(3):
@@ -30,8 +33,8 @@ class MDP:
                                     for g in range(3):
                                         for h in range(3):
                                             for i in range(3):
-                                                possible_states.add((a,b,c,d,e,f,g,h,i))
-            return possible_states
+                                                all_board_config.add((a,b,c,d,e,f,g,h,i))
+            return all_board_config
         # define a function to check if there are 2 winners at the same time
         def _check_2_win(state):
             """
@@ -117,7 +120,7 @@ class MDP:
             return 10
         if self.win(state) == 2:
             return -10
-        return -4
+        return -1
             
     def win(self, state):
         for i in range(3):
@@ -146,3 +149,14 @@ class MDP:
         
         return possible_next_states
     
+    def improved_transition_probability(self, state, action):
+        """
+        This function takes a state and returns the probability of each possible next state
+        inspired from value iteration policy
+        """
+        # if the game is over, return 0
+        if state in self.T_states:
+            return 0
+        # if the game is not over, return 1/number of possible actions for O
+        else:
+            return 1 if action == self.policy[state] else 0
