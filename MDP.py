@@ -24,16 +24,9 @@ class MDP:
             # 1 : X
             # 2 : O
             all_board_config = set()
-            for a in range(3):
-                for b in range(3):
-                    for c in range(3):
-                        for d in range(3):
-                            for e in range(3):
-                                for f in range(3):
-                                    for g in range(3):
-                                        for h in range(3):
-                                            for i in range(3):
-                                                all_board_config.add((a,b,c,d,e,f,g,h,i))
+            for values in np.ndindex(3, 3, 3, 3, 3, 3, 3, 3, 3):
+                state = tuple(values)
+                all_board_config.add(state)
             return all_board_config
         # define a function to check if there are 2 winners at the same time
         def _check_2_win(state):
@@ -49,14 +42,13 @@ class MDP:
             if count_h == 2 or count_v == 2:
                 return True
             return False
-        print(_check_2_win((2, 2, 2, 1, 1, 1, 1, 0, 2)))
     
         # initialize states with possible and impossible states
         self.states = _brute_states()
         
         # remove states that are not possible
         for state in self.states.copy():
-            # we suppose that computer is always X, thus if there   are more X than O, remove the state
+            # we suppose that computer is always X, thus if there are more X than O, remove the state
             if state.count(1) > state.count(2):
                 self.states.remove(state)
             # if there is a difference between the number of Os and Xs which is superioe to 2, remove the state
@@ -75,18 +67,6 @@ class MDP:
                 self.T_states.add(state)
             elif state.count(0) == 0:
                 self.T_states.add(state)
-
-    # def current_player(self, state):
-    #     if self.first_player == 1:
-    #         if state.count(1) <= state.count(2):
-    #             return 1
-    #         else:
-    #             return 2
-    #     else:
-    #         if state.count(1) <= state.count(2):
-    #             return 2
-    #         else:
-    #             return 1
 
     def generate_actions(self):
         """
