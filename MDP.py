@@ -97,10 +97,10 @@ class MDP:
         """
 
         if self.win(state) == 1:
-            return 10
+            return 1
         if self.win(state) == 2:
-            return -10
-        return -1
+            return -1
+        return 0
             
     def win(self, state):
         for i in range(3):
